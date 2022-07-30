@@ -17,8 +17,8 @@ class UserSerializer(serializers.ModelSerializer):
             'password'
         )
 
-    def create(self, validated_data):
-        password = validated_data.get('password')
+    def create(self, validated_data):               # hash the password
+        password = validated_data.pop('password')
         hashed_password = make_password(password)
         validated_data['password'] = hashed_password
         instance = super(UserSerializer, self).create(validated_data)
