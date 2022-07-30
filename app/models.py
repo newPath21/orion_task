@@ -77,7 +77,7 @@ class Meter(AbstractUUID):
         null=True
     )
     initial_value = models.FloatField(
-        _('время первого показания'),
+        _('начальное значение в счетчике'),
         default=0.0,
     )
     measurement_unit = models.CharField(

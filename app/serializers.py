@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from app.models import Customer, Device
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,40 +17,31 @@ class UserSerializer(serializers.ModelSerializer):
             'password'
         )
 
-
-class CustomerSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-
-    class Meta:
-        model = Customer
-        fields = (
-            'id',
-            'user',
-            'description'
-        )
-
-
-class CustomerCreateSerializer(serializers.ModelSerializer):
-    user_id = serializers.IntegerField()
-
-    class Meta:
-        model = Customer
-        fields = (
-            'user_id',
-            'description'
-        )
-
     def create(self, validated_data):
-        instance = super().create(validated_data)
-
+        password = validated_data.get('password')
+        hashed_password = make_password(password)
+        validated_data['password'] = hashed_password
+        instance = super(UserSerializer, self).create(validated_data)
         return instance
 
 
-class DeviceSerializer(serializers.ModelSerializer):
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = (
+            'description',
+        )
 
+
+class SuccessSerializer(serializers.Serializer):
+    success = serializers.BooleanField()
+
+
+class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
         fields = (
+            'uuid',
             'dev_eui',
             'state',
             'description',
@@ -57,5 +49,13 @@ class DeviceSerializer(serializers.ModelSerializer):
             'activation_time',
             'description',
             'type',
-            'owner'                                                    # uuid from Customer
+            'owner'  # uuid from Customer
+        )
+
+
+class DeviceCSVSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Device
+        fields = (
+            'description',
         )
