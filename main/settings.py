@@ -28,8 +28,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_swagger',
     'drf_yasg',
+    'django_extensions',
     'app',
     'django_filters',
+
 ]
 
 MIDDLEWARE = [
@@ -99,7 +101,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Almaty'
 
 USE_I18N = True
 
@@ -129,7 +131,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),             # after 7 days token expires
     'REFRESH_TOKEN_LIFETIME': timedelta(days=8),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
@@ -161,6 +163,9 @@ SIMPLE_JWT = {
 }
 
 GEOPOSITION_GOOGLE_MAPS_API_KEY = 'YOUR_API_KEY'
+
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
