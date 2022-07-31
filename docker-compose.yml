@@ -10,6 +10,8 @@ services:
       - .:/app
     depends_on:
       - db
+      - redis
+      - worker
 
   db:
     image: postgres:11.14-alpine
@@ -21,3 +23,18 @@ services:
       - .dbdata:/var/lib/postgres
     ports:
       - 5431:5432
+
+  worker:
+    build: ./project
+    command: celery worker --app=worker.celery --loglevel=info
+    volumes:
+      - ./project:/usr/src/app
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - api
+      - redis
+
+  redis:
+      image: redis:6-alpine

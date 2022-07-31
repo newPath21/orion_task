@@ -33,8 +33,15 @@ class CustomerSerializer(serializers.ModelSerializer):
         )
 
 
-class SuccessSerializer(serializers.Serializer):
-    success = serializers.BooleanField()
+class CustomerFullSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Customer
+        fields = (
+            'user',
+            'description',
+        )
 
 
 class DeviceSerializer(serializers.ModelSerializer):
@@ -59,3 +66,7 @@ class DeviceCSVSerializer(serializers.ModelSerializer):
         fields = (
             'description',
         )
+
+
+class SuccessSerializer(serializers.Serializer):
+    success = serializers.BooleanField()
